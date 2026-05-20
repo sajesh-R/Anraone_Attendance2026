@@ -1,0 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;0,14..32,900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-800;
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* ─── Custom Scrollbar ──────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #cbd5e1; }
+
+/* ─── Glassmorphism ─────────────────────────────────────────── */
+.glass-panel {
+  background: rgba(255,255,255,0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* ─── Page Gradient Background ──────────────────────────────── */
+.gradient-bg {
+  background:
+    radial-gradient(ellipse 70% 50% at 90% 0%, rgba(45,88,252,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 0% 100%, rgba(45,88,252,0.04) 0%, transparent 70%),
+    #f8fafc;
+}
+
+/* ─── Premium Card Shadow ────────────────────────────────────── */
+.shadow-premium {
+  box-shadow:
+    0 1px 3px rgba(0,0,0,0.04),
+    0 4px 16px rgba(0,0,0,0.04),
+    0 0 0 1px rgba(0,0,0,0.03);
+}
+.shadow-card-hover {
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.06),
+    0 8px 28px rgba(0,0,0,0.06),
+    0 0 0 1px rgba(0,0,0,0.04);
+}
+
+/* ─── Brand Button Shadows ──────────────────────────────────── */
+.shadow-brand       { box-shadow: 0 4px 14px rgba(45,88,252,0.35); }
+.shadow-brand-hover { box-shadow: 0 6px 20px rgba(45,88,252,0.45); }
+
+/* ─── Hover Lift ─────────────────────────────────────────────── */
+.hover-lift { transition: transform 0.22s cubic-bezier(0.16,1,0.3,1), box-shadow 0.22s ease; }
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 8px 28px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.04);
+}
+
+/* ─── Animations ─────────────────────────────────────────────── */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  20%     { transform: translateX(-6px); }
+  40%     { transform: translateX(6px); }
+  60%     { transform: translateX(-3px); }
+  80%     { transform: translateX(3px); }
+}
+@keyframes pulseGlow {
+  0%,100% { opacity:0.6; transform: scale(0.9); }
+  50%     { opacity:1;   transform: scale(1.1); box-shadow: 0 0 12px rgba(45,88,252,0.7); }
+}
+
+.animate-slide-up { animation: slideUp 0.4s cubic-bezier(0.16,1,0.3,1) both; }
+.animate-fade-in  { animation: fadeIn 0.3s ease both; }
+.animate-shake    { animation: shake 0.4s ease; }
+
+/* ─── Utility ────────────────────────────────────────────────── */
+.text-xxs { font-size: 0.65rem; line-height: 1rem; }
+
+/* ─── Form Inputs ─────────────────────────────────────────────── */
+.input-base {
+  @apply w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm text-slate-800 font-medium
+         focus:border-brand-500 focus:ring-2 focus:ring-brand-100 outline-none
+         transition-all duration-200 placeholder-slate-300 bg-white;
+}
+
+/* ─── Auth Background ─────────────────────────────────────────── */
+.auth-bg {
+  background: 
+    radial-gradient(ellipse 80% 60% at 20% 20%, rgba(45,88,252,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 80%, rgba(99,102,241,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(255,255,255,1) 0%, #eef1f8 100%);
+  position: relative;
+}
+
+/* ─── Floating Bubble Animations ──────────────────────────────── */
+@keyframes float-bubble-1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(55px, -90px) scale(1.15); }
+  100% { transform: translate(-35px, 35px) scale(0.9); }
+}
+@keyframes float-bubble-2 {
+  0%   { transform: translate(0, 0) scale(0.9); }
+  50%  { transform: translate(-70px, 55px) scale(1.12); }
+  100% { transform: translate(45px, -45px) scale(0.95); }
+}
+@keyframes float-bubble-3 {
+  0%   { transform: translate(0, 0) scale(1.1); }
+  50%  { transform: translate(45px, 45px) scale(0.85); }
+  100% { transform: translate(-55px, -65px) scale(1.15); }
+}
+
+.bubble-drift-1 { animation: float-bubble-1 28s ease-in-out infinite alternate; }
+.bubble-drift-2 { animation: float-bubble-2 32s ease-in-out infinite alternate; }
+.bubble-drift-3 { animation: float-bubble-3 38s ease-in-out infinite alternate; }
+
+/* ─── Badge Pulse ─────────────────────────────────────────────── */
+.stat-indicator { position: relative; }
+.stat-indicator::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 8px; height: 8px;
+  border-radius: 999px;
+  background: #2d58fc;
+  animation: pulseGlow 2.2s infinite;
+}
+
+/* ─── Role Badge Colors ───────────────────────────────────────── */
+.badge-admin    { @apply bg-purple-100 text-purple-700 border border-purple-200; }
+.badge-manager  { @apply bg-blue-100   text-blue-700   border border-blue-200; }
+.badge-employee { @apply bg-emerald-100 text-emerald-700 border border-emerald-200; }
