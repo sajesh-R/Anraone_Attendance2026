@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { subscribeToPushNotifications, unsubscribeFromPushNotifications } from '../utils/pushNotifications';
 
 const AuthContext = createContext(null);
 
@@ -47,6 +48,7 @@ export const AuthProvider = ({ children }) => {
       const { data } = await axios.post('/api/auth/login', { email, password });
       setToken(data.token);
       setUser(data.user);
+      subscribeToPushNotifications(data.token).catch(console.error);
       return { success: true };
     } catch (error) {
       return {
@@ -62,6 +64,7 @@ export const AuthProvider = ({ children }) => {
       const { data } = await axios.post('/api/auth/register', { fullName, email, password, role });
       setToken(data.token);
       setUser(data.user);
+      subscribeToPushNotifications(data.token).catch(console.error);
       return { success: true };
     } catch (error) {
       return {
@@ -77,6 +80,7 @@ export const AuthProvider = ({ children }) => {
       const { data } = await axios.post('/api/auth/google', googleProfile);
       setToken(data.token);
       setUser(data.user);
+      subscribeToPushNotifications(data.token).catch(console.error);
       return { success: true };
     } catch (error) {
       return {
@@ -92,6 +96,7 @@ export const AuthProvider = ({ children }) => {
       const { data } = await axios.post('/api/auth/microsoft', msProfile);
       setToken(data.token);
       setUser(data.user);
+      subscribeToPushNotifications(data.token).catch(console.error);
       return { success: true };
     } catch (error) {
       return {
@@ -104,6 +109,7 @@ export const AuthProvider = ({ children }) => {
   // ── Logout ────────────────────────────────────────────────
   const logout = async () => {
     try {
+      await unsubscribeFromPushNotifications(token);
       await axios.post('/api/auth/logout');
     } catch (_) {
       // Silent fail — still clear local state

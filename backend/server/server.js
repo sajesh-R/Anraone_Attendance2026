@@ -1,10 +1,12 @@
 require('dotenv').config();
+process.env.TZ = process.env.TZ || 'Asia/Kolkata';
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
 
 const { connectDB } = require('../config/db');
+const { startScheduler } = require('../services/schedulerService');
 
 // ── Routers ───────────────────────────────────────────────────
 const authRoutes = require('../routes/authRoutes');
@@ -16,6 +18,7 @@ const overtimeRoutes = require('../routes/overtimeRoutes');
 const regularizationRoutes = require('../routes/regularizationRoutes');
 const auditRoutes = require('../routes/auditRoutes');
 const reportRoutes = require('../routes/reportRoutes');
+const pushRoutes = require('../routes/pushRoutes');
 
 
 
@@ -48,6 +51,9 @@ app.use('/uploads', express.static(uploadsDir));
 // ── Connect DB and Start Server ───────────────────────────────
 const startServer = async () => {
   await connectDB();
+  
+  // Start the background cron jobs for notifications
+  startScheduler();
 
   // ── Mount API Endpoints ──────────────────────────────────
   app.use('/api/auth',  authRoutes);
@@ -59,6 +65,7 @@ const startServer = async () => {
   app.use('/api/regularization', regularizationRoutes);
   app.use('/api/audit-trail', auditRoutes);
   app.use('/api/reports', reportRoutes);
+  app.use('/api/push', pushRoutes);
 
 
 

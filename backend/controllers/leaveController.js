@@ -3,6 +3,7 @@ const LeaveBalance = require('../models/LeaveBalance');
 const Notification = require('../models/Notification');
 const User = require('../models/User');
 const mongoose = require('mongoose');
+const { sendNotification } = require('../services/notificationService');
 
 // Helper to calculate days between two dates
 const calculateDays = (from, to) => {
@@ -75,13 +76,15 @@ const applyLeave = async (req, res) => {
     });
 
     // Notify Managers
-    const managers = await User.find({ role: 'Manager' });
+    const managers = await User.find({ role: { $in: ['Admin', 'Manager'] } });
     const notificationPromises = managers.map(manager => 
-      Notification.create({
+      sendNotification({
         recipientId: manager._id,
         senderId: employeeId,
         type: 'LeaveRequest',
-        message: `${req.user.fullName} has applied for ${leaveType} from ${fromDate} to ${toDate}.`,
+        title: 'New Leave Request',
+        message: `${req.user.fullName} has applied for ${leaveType} from ${new Date(fromDate).toDateString()} to ${new Date(toDate).toDateString()}.`,
+        deliveryChannel: ['In-App', 'Push'],
         relatedId: leaveRequest._id,
       })
     );
@@ -192,11 +195,14 @@ const updateLeaveStatus = async (req, res) => {
     await leaveRequest.save();
 
     // Notify Employee
-    await Notification.create({
+    const notificationType = status === 'Approved' ? 'LeaveApproval' : 'LeaveRejection';
+    await sendNotification({
       recipientId: leaveRequest.employeeId,
       senderId: req.user._id,
-      type: 'LeaveStatusUpdate',
-      message: `Your leave request for ${leaveRequest.leaveType} has been ${status.toLowerCase()}.`,
+      type: notificationType,
+      title: `Leave Request ${status}`,
+      message: `Your leave request for ${leaveRequest.leaveType} from ${new Date(leaveRequest.fromDate).toDateString()} to ${new Date(leaveRequest.toDate).toDateString()} has been ${status.toLowerCase()}.`,
+      deliveryChannel: ['In-App', 'Push'],
       relatedId: leaveRequest._id,
     });
 

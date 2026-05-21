@@ -8,13 +8,30 @@ const notificationSchema = new mongoose.Schema(
       required: true,
     },
     senderId: {
+      // Made optional because system-generated alerts don't have a specific sender
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: false,
     },
     type: {
       type: String,
-      enum: ['LeaveRequest', 'LeaveStatusUpdate', 'OvertimeRequest', 'OvertimeStatusUpdate', 'RegularizationRequest', 'RegularizationStatusUpdate'],
+      enum: [
+        'LeaveRequest',
+        'LeaveStatusUpdate',
+        'OvertimeRequest',
+        'OvertimeStatusUpdate',
+        'RegularizationRequest',
+        'RegularizationStatusUpdate',
+        'PunchInReminder',
+        'AbsenceAlert',
+        'MonthlySummary',
+        'LeaveApproval',
+        'LeaveRejection'
+      ],
+      required: true,
+    },
+    title: {
+      type: String,
       required: true,
     },
     message: {
@@ -29,6 +46,21 @@ const notificationSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    notificationStatus: {
+      type: String,
+      enum: ['Pending', 'Sent', 'Failed'],
+      default: 'Pending'
+    },
+    deliveryChannel: {
+      type: [{
+        type: String,
+        enum: ['In-App', 'Email', 'Push']
+      }],
+      default: ['In-App']
+    },
+    sentTimestamp: {
+      type: Date
+    }
   },
   {
     timestamps: true,

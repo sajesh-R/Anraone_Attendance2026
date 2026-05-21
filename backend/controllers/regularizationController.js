@@ -3,6 +3,7 @@ const Attendance = require('../models/Attendance');
 const AuditTrail = require('../models/AuditTrail');
 const Notification = require('../models/Notification');
 const User = require('../models/User');
+const { sendNotification } = require('../services/notificationService');
 
 // @route   POST /api/regularization/apply
 // @desc    Apply for attendance regularization
@@ -114,13 +115,15 @@ exports.applyRegularization = async (req, res) => {
     });
 
     // 7. Notify Managers
-    const managers = await User.find({ role: 'Manager' });
+    const managers = await User.find({ role: { $in: ['Admin', 'Manager'] } });
     const notificationPromises = managers.map((manager) =>
-      Notification.create({
+      sendNotification({
         recipientId: manager._id,
         senderId: employeeId,
         type: 'RegularizationRequest',
+        title: 'New Regularization Request',
         message: `${req.user.fullName} has applied for attendance regularization (${regularizationType}) for ${targetDate.toLocaleDateString()}.`,
+        deliveryChannel: ['In-App', 'Push'],
         relatedId: newRequest._id,
       })
     );
@@ -285,11 +288,13 @@ exports.updateRegularizationStatus = async (req, res) => {
     });
 
     // 7. Notify Employee
-    await Notification.create({
+    await sendNotification({
       recipientId: request.employeeId,
       senderId: req.user._id,
       type: 'RegularizationStatusUpdate',
+      title: `Regularization Request ${status}`,
       message: `Your regularization request for ${targetDate.toLocaleDateString()} has been ${status.toLowerCase()}.`,
+      deliveryChannel: ['In-App', 'Push'],
       relatedId: request._id,
     });
 

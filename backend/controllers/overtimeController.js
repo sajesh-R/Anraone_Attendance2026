@@ -2,6 +2,7 @@ const OvertimeRequest = require('../models/OvertimeRequest');
 const AuditTrail = require('../models/AuditTrail');
 const Notification = require('../models/Notification');
 const User = require('../models/User');
+const { sendNotification } = require('../services/notificationService');
 
 // @route   POST /api/overtime/log
 // @desc    Log overtime request
@@ -63,13 +64,15 @@ exports.logOvertime = async (req, res) => {
     });
 
     // 5. Notify Managers
-    const managers = await User.find({ role: 'Manager' });
+    const managers = await User.find({ role: { $in: ['Admin', 'Manager'] } });
     const notificationPromises = managers.map((manager) =>
-      Notification.create({
+      sendNotification({
         recipientId: manager._id,
         senderId: employeeId,
         type: 'OvertimeRequest',
+        title: 'New Overtime Request',
         message: `${req.user.fullName} has submitted an overtime request of ${overtimeHours} hours for ${targetDate.toLocaleDateString()}.`,
+        deliveryChannel: ['In-App', 'Push'],
         relatedId: newRequest._id,
       })
     );
@@ -176,11 +179,13 @@ exports.updateOvertimeStatus = async (req, res) => {
     });
 
     // 5. Notify Employee
-    await Notification.create({
+    await sendNotification({
       recipientId: request.employeeId,
       senderId: req.user._id,
       type: 'OvertimeStatusUpdate',
+      title: `Overtime Request ${status}`,
       message: `Your overtime request for ${new Date(request.attendanceDate).toLocaleDateString()} has been ${status.toLowerCase()}.`,
+      deliveryChannel: ['In-App', 'Push'],
       relatedId: request._id,
     });
 
