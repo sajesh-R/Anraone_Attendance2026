@@ -206,10 +206,10 @@ const Sidebar = () => {
               </span>
             </div>
           )}
-          <div className="flex-1 min-w-0">
-            <p className="text-[13px] font-black text-white truncate tracking-tight">{user?.fullName}</p>
+          <div className="flex-1 break-words">
+            <p className="text-[13px] font-black text-white tracking-tight leading-tight mb-1">{user?.fullName}</p>
 
-            <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-white/20 text-white/90`}>
+            <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-white/20 text-white/90 inline-block`}>
               {user?.role}
             </span>
           </div>
