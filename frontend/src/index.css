@@ -48,8 +48,8 @@
 }
 
 /* ─── Brand Button Shadows ──────────────────────────────────── */
-.shadow-brand       { box-shadow: 0 4px 14px rgba(45,88,252,0.35); }
-.shadow-brand-hover { box-shadow: 0 6px 20px rgba(45,88,252,0.45); }
+.shadow-brand       { box-shadow: 0 4px 14px rgba(24,119,242,0.35); }
+.shadow-brand-hover { box-shadow: 0 6px 20px rgba(24,119,242,0.45); }
 
 /* ─── Hover Lift ─────────────────────────────────────────────── */
 .hover-lift { transition: transform 0.22s cubic-bezier(0.16,1,0.3,1), box-shadow 0.22s ease; }

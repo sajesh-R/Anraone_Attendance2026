@@ -19,6 +19,7 @@ const regularizationRoutes = require('../routes/regularizationRoutes');
 const auditRoutes = require('../routes/auditRoutes');
 const reportRoutes = require('../routes/reportRoutes');
 const pushRoutes = require('../routes/pushRoutes');
+const payrollRoutes = require('../routes/payrollRoutes');
 
 
 
@@ -66,8 +67,7 @@ const startServer = async () => {
   app.use('/api/audit-trail', auditRoutes);
   app.use('/api/reports', reportRoutes);
   app.use('/api/push', pushRoutes);
-
-
+  app.use('/api/payroll', payrollRoutes);
 
   // ── Health Check ─────────────────────────────────────────
   app.get('/', (req, res) => {

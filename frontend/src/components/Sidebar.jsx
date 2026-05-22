@@ -97,6 +97,44 @@ const NAV_ITEMS = [
       </svg>
     ),
   },
+  {
+    to: '/payroll-config',
+    label: 'Payroll Config',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+    ),
+  },
+  {
+    to: '/payroll-process',
+    label: 'Payroll Process',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+      </svg>
+    ),
+  },
+  {
+    to: '/payroll-dashboard',
+    label: 'Payroll Dashboard',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M11 3.055A9.003 9.003 0 1020.945 13H11V3.055z" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+      </svg>
+    ),
+  },
+  {
+    to: '/my-payslips',
+    label: 'My Payslips',
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+    ),
+  },
 ];
 
 
@@ -117,19 +155,23 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="w-64 flex-shrink-0 bg-white border-r border-slate-100 flex flex-col shadow-sm">
+    <aside className="w-64 flex-shrink-0 bg-brand-600 flex flex-col shadow-xl z-20">
       {/* Brand */}
-      <div className="px-5 py-5 border-b border-slate-50 flex items-center justify-start">
-        <Logo className="h-8 w-auto" />
+      <div className="px-5 py-5 flex items-center justify-start text-white">
+        <Logo className="h-8 w-auto text-white" />
       </div>
 
 
 
 
-      {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
         {NAV_ITEMS.filter(item => {
-          if (item.to === '/employees') return user?.role === 'Admin';
+          if (item.to === '/employees' || item.to === '/payroll-config' || item.to === '/payroll-process') {
+            return user?.role === 'Admin';
+          }
+          if (item.to === '/payroll-dashboard') {
+            return user?.role === 'Admin' || user?.role === 'Manager';
+          }
           return true;
         }).map(({ to, end, label, icon }) => (
           <NavLink
@@ -139,8 +181,8 @@ const Sidebar = () => {
             id={`nav-${label.toLowerCase()}`}
             className={({ isActive }) =>
               `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-all duration-150 ${isActive
-                ? 'bg-brand-600 text-white shadow-lg shadow-brand/20'
-                : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                ? 'bg-white text-brand-600 shadow-lg'
+                : 'text-white/80 hover:bg-white/10 hover:text-white'
               }`
             }
 
@@ -152,22 +194,22 @@ const Sidebar = () => {
       </nav>
 
       {/* User Footer */}
-      <div className="px-3 py-4 border-t border-slate-50">
+      <div className="px-3 py-4 border-t border-white/10">
         {/* User pill */}
-        <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-slate-50 mb-2">
+        <div className="flex items-center gap-3 px-3 py-3 rounded-xl bg-white/10 mb-2">
           {user?.profilePhoto ? (
             <img src={user.profilePhoto} alt={user?.fullName} className="w-8 h-8 rounded-lg object-cover flex-shrink-0" />
           ) : (
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center flex-shrink-0">
               <span className="text-xs font-bold text-white">
                 {user?.fullName?.charAt(0)?.toUpperCase() || '?'}
               </span>
             </div>
           )}
           <div className="flex-1 min-w-0">
-            <p className="text-[13px] font-black text-slate-900 truncate tracking-tight">{user?.fullName}</p>
+            <p className="text-[13px] font-black text-white truncate tracking-tight">{user?.fullName}</p>
 
-            <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full ${ROLE_COLORS[user?.role] || 'bg-slate-100 text-slate-500'}`}>
+            <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-full bg-white/20 text-white/90`}>
               {user?.role}
             </span>
           </div>
@@ -177,7 +219,7 @@ const Sidebar = () => {
         <button
           id="sidebar-btn-logout"
           onClick={handleLogout}
-          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-red-500 hover:bg-red-50 hover:text-red-600 transition-all duration-150"
+          className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold text-white/80 hover:bg-white/10 hover:text-white transition-all duration-150"
         >
           <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" width="18" height="18">
             <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />

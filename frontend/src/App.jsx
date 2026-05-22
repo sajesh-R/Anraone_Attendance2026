@@ -19,6 +19,10 @@ import Regularization from './pages/Regularization';
 import AuditTrail from './pages/AuditTrail';
 import Employees from './pages/Employees';
 import Reports from './pages/Reports';
+import PayrollConfig from './pages/PayrollConfig';
+import PayrollProcessing from './pages/PayrollProcessing';
+import PayrollDashboard from './pages/PayrollDashboard';
+import EmployeePayslips from './pages/EmployeePayslips';
 
 
 /**
@@ -173,6 +177,46 @@ const App = () => {
               <ProtectedRoute allowedRoles={['Admin']}>
                 <DashboardLayout>
                   <Employees />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/payroll-config"
+            element={
+              <ProtectedRoute allowedRoles={['Admin']}>
+                <DashboardLayout>
+                  <PayrollConfig />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/payroll-process"
+            element={
+              <ProtectedRoute allowedRoles={['Admin']}>
+                <DashboardLayout>
+                  <PayrollProcessing />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/payroll-dashboard"
+            element={
+              <ProtectedRoute allowedRoles={['Admin', 'Manager']}>
+                <DashboardLayout>
+                  <PayrollDashboard />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/my-payslips"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <EmployeePayslips />
                 </DashboardLayout>
               </ProtectedRoute>
             }
