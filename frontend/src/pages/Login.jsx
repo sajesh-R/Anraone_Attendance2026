@@ -11,9 +11,16 @@ const Login = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError]         = useState('');
 
-  const { login, googleLogin, microsoftLogin } = useAuth();
+  const { login, googleLogin, microsoftLogin, isAuthenticated } = useAuth();
   const navigate  = useNavigate();
   const location  = useLocation();
+
+  // ── Redirect if already logged in ───────────────────────────
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   // ── Email / Password submit ───────────────────────────────
   const handleSubmit = async (e) => {

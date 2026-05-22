@@ -1,9 +1,18 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Shield, PieChart, Building2, Package } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const RoleSelection = () => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+
+  // ── Redirect if already logged in ───────────────────────────
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const roles = [
     {

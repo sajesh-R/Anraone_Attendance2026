@@ -13,9 +13,16 @@ const Register = () => {
   const [submitting, setSubmitting]     = useState(false);
   const [error, setError]               = useState('');
 
-  const { register } = useAuth();
+  const { register, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+
+  // ── Redirect if already logged in ───────────────────────────
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
